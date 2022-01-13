@@ -1,0 +1,30 @@
+[
+    {
+        "symbol": "BTC",
+        "amount": 0.200022155
+    },
+    {
+        "symbol": "ETH",
+        "amount": 4.23851
+    },
+    {
+        "symbol": "AVAX",
+        "amount": 34.43144
+    },
+    {
+        "symbol": "ADA",
+        "amount": 2886.5087
+    },
+    {
+        "symbol": "BNB",
+        "amount": 1
+    },
+    {
+        "symbol": "DOT",
+        "amount": 56.912
+    },
+    {
+        "symbol": "MATIC",
+        "amount": 202.8952
+    }
+]
