@@ -18,9 +18,11 @@ app.use(express.json());
 //=========================================================================================
 const defaultRoute = require('./api/routes/default');
 const portfolioRoute = require('./api/routes/portfolio');
+const authRoutes = require('./api/routes/authRoutes');
 
 app.use('/api/default', defaultRoute);
 app.use('/api/portfolio', portfolioRoute);
+app.use('/api/auth', authRoutes);
 
 //=========================================================================================
 //                                Tell the Server to listen
