@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-import { Schema } from 'mongoose';
+import { Schema, Model } from 'mongoose';
 
 const bcrypt = require('bcrypt');
 
@@ -30,7 +30,11 @@ interface User {
     password: string;
 }
 
-const userSchema = new Schema<User>({
+interface UserModel extends Model<User> {
+    login(): boolean;
+}
+
+const userSchema = new Schema<User, UserModel>({
     email: {
         type: String, 
         required: true,
@@ -42,6 +46,10 @@ const userSchema = new Schema<User>({
         required: true,
         minLength: 8
     }
+});
+
+userSchema.static('login', function login() {
+    return true;
 });
 
 // We 'hook up' the mongoose schema <userSchema> to the mongoose hooks

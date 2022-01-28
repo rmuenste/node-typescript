@@ -30,6 +30,7 @@ try {
     });
 
     const connection = mongoose.connection; 
+
     connection.once('open', () => {
       console.log('2> MongoDB connection name: ' + connection.name);
     });
