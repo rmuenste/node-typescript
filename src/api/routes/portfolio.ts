@@ -5,7 +5,7 @@ const router = express.Router();
 
 const fs = require('fs');
 
-router.route('/').get((req : any, res : any) => {
+router.route('/').get( (req : any, res : any) => {
 
   let portfolio: any;
 

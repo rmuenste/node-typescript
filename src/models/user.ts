@@ -31,7 +31,7 @@ interface User {
 }
 
 interface UserModel extends Model<User> {
-    login(): boolean;
+    login(): void;
 }
 
 const userSchema = new Schema<User, UserModel>({
@@ -48,8 +48,16 @@ const userSchema = new Schema<User, UserModel>({
     }
 });
 
-userSchema.static('login', function login() {
-    return true;
+userSchema.static('login', async function login(email, password) {
+    const user = await this.findOne({ email });
+    if (user) {
+      const auth = await bcrypt.compare(password, user.password);
+      if(auth) {
+          return user;
+      }
+      throw 'incorrect password';
+    }
+    throw 'incorrect email';
 });
 
 // We 'hook up' the mongoose schema <userSchema> to the mongoose hooks

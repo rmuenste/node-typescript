@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 
 const maxAge: number = 24 * 60 * 60;
 function createToken (id: number) {
+  // TODO: place secret in .env file
   return jwt.sign({ id }, 'joker', {expiresIn: maxAge});
 }
 
@@ -45,8 +46,27 @@ router.route('/login/').get( (req: any, res: any) => {
 //=========================================================================================
 //                              Login Post Route 
 //=========================================================================================
-router.route('/login/').post( (req: any, res: any) => {
-  return res.status(200).json({message: "Hello from POST login route!"});
+router.route('/login/').post( async (req: any, res: any) => {
+
+  const { email, password } = req.body;
+  console.log(`Got user ${email} and password ${password}`);
+  try {
+    const user = await User.login(email, password);
+    return res.status(200).json({user: user._id});
+  }
+  catch(error) {
+    let errorMsg = "";
+    if (error === "incorrect password")
+        errorMsg = "Incorrect password";
+    else if (error === "incorrect email")
+        errorMsg = "Incorrect email";
+    else 
+        errorMsg = "Error during authentication";
+
+    console.log(`This is the error ${error}`);
+    return res.status(400).json({message: errorMsg});
+  }
+
 });
 
 
