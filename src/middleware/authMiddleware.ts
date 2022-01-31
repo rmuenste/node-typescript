@@ -1,6 +1,7 @@
+import { Request, Response, NextFunction } from 'express';
 const jwt = require('jsonwebtoken');
 
-export function requireAuth2(req: any, res: any, next: any): void {
+export function requireAuth2(req: Request, res: Response, next: NextFunction): void {
 
     const token = req.cookies.jwt;
 
@@ -20,4 +21,3 @@ export function requireAuth2(req: any, res: any, next: any): void {
 
 };
 
-//module.exports = { requireAuth };

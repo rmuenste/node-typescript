@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 import { requireAuth2 } from './middleware/authMiddleware';
+//import * as requireAuth2 from './middleware/authMiddleware';
 
 dotenv.config({path: __dirname + '/../.env'}); 
 //=========================================================================================
@@ -20,16 +21,18 @@ const mongoUri: string = process.env.LOCAL_MONGO_URI as string;
 
 app.use(cors());
 //=========================================================================================
-//                                 Set up middleware
+//                           Set up custom middleware
 //=========================================================================================
 function loggerMiddleware(request: express.Request, response: express.Response, next: any) {
   console.log(`${request.method} ${request.path}`);
   next();
 }
 
-function requireAuth(req: any, res: any, next: any) {
+function requireAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
 
     const token = req.cookies.jwt;
+
+    console.log("Portfolio route triggered");
 
     if( token ) {
         jwt.verify(token, 'joker', (err: any, decodedToken: any) => {
@@ -38,7 +41,6 @@ function requireAuth(req: any, res: any, next: any) {
                 console.log(err.message);
             } else {
                 next();
-//                res.status(200).json({ msg: "User authentication successful. Access granted.", auth: true });
             }
         });
     } else {
