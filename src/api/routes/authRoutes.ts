@@ -52,6 +52,9 @@ router.route('/login/').post( async (req: any, res: any) => {
   console.log(`Got user ${email} and password ${password}`);
   try {
     const user = await User.login(email, password);
+    const token = createToken(user._id);
+    res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
+    console.log("Cookie added");
     return res.status(200).json({user: user._id});
   }
   catch(error) {
@@ -69,22 +72,15 @@ router.route('/login/').post( async (req: any, res: any) => {
 
 });
 
+//=========================================================================================
+//                              Login Get Route 
+//=========================================================================================
+router.route('/logout/').get( (req: any, res: any) => {
 
-router.route('/set-cookies/').get( (req: any, res: any) => {
-
-  res.cookie('newUser', false);
-  res.cookie('isEmployee', true, { maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
-  res.send("You got cookies");
-
+  res.cookie('jwt', '', {httpOnly: true, maxAge: 1});
+  console.log("Cookie added");
+  return res.status(200).json({message: "You are now logged out."});
 });
 
-router.route('/read-cookies/').get( (req: any, res: any) => {
-
-  const cookies = req.cookies;
-  console.log(cookies);
-
-  res.json(cookies);
-
-});
 
 module.exports = router;

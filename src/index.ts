@@ -17,8 +17,16 @@ const cors = require('cors');
 // const PORT: number = (process.env.PORT as number) || 5001;
 const port = process.env.PORT ?? 5001;
 const mongoUri: string = process.env.LOCAL_MONGO_URI as string;
+let corsOptions = {
+ "origin": "http://localhost:4200",
+ "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+ "credentials": true,
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
+
 //=========================================================================================
 //                                 Set up middleware
 //=========================================================================================
@@ -37,6 +45,7 @@ function requireAuth(req: any, res: any, next: any) {
                 res.status(400).json({ msg: "User authentication failed. Access denied.", auth: false });
                 console.log(err.message);
             } else {
+                console.log("Token verified, access granted");
                 next();
 //                res.status(200).json({ msg: "User authentication successful. Access granted.", auth: true });
             }
