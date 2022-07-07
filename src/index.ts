@@ -40,8 +40,6 @@ function requireAuth(req: express.Request, res: express.Response, next: express.
 
     const token = req.cookies.jwt;
 
-    console.log("Portfolio route triggered");
-
     if( token ) {
         jwt.verify(token, 'joker', (err: any, decodedToken: any) => {
             if(err) {
@@ -90,12 +88,15 @@ connect(mongoUri);
 const defaultRoute = require('./api/routes/default');
 const portfolioRoute = require('./api/routes/portfolio');
 const authRoutes = require('./api/routes/authRoutes');
+const vocRoutes = require('./api/routes/vocRoutes');
 
 app.use('/api/default', defaultRoute);
 app.use('/api/portfolio', requireAuth);
 //app.use('/api/portfolio', requireAuth2 );
 app.use('/api/portfolio', portfolioRoute);
 app.use('/api/auth', authRoutes);
+app.use('/api/voc', requireAuth);
+app.use('/api/voc', vocRoutes);
 
 
 //=========================================================================================

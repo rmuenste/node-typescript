@@ -26,6 +26,7 @@ router.route('/signup/').post( async (req: any, res: any) => {
   const { email, password } = req.body;
 
   try {
+    // The create function 'creates' a new user instance and saves it to the database
     const user = await User.create({email, password}); 
     const token = createToken(user._id);
     res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
