@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const maxAge: number = 24 * 60 * 60;
 function createToken (id: number) {
   // TODO: place secret in .env file
-  return jwt.sign({ id }, 'joker', {expiresIn: maxAge});
+  return jwt.sign({ "id" : id }, 'joker', {expiresIn: maxAge});
 }
 
 //=========================================================================================

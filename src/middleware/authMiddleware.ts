@@ -11,6 +11,7 @@ export function requireAuth2(req: Request, res: Response, next: NextFunction): v
                 res.status(400).json({ msg: "User authentication failed. Access denied.", auth: false });
                 console.log(err.message);
             } else {
+                console.log(decodedToken);
                 next();
 //                res.status(200).json({ msg: "User authentication successful. Access granted.", auth: true });
             }

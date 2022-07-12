@@ -47,6 +47,8 @@ function requireAuth(req: express.Request, res: express.Response, next: express.
                 console.log(err.message);
             } else {
                 console.log("Token verified, access granted");
+                req.body.userId = decodedToken.id;
+                console.log(req);
                 next();
             }
         });
