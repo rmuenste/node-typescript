@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-import { Schema, Model } from 'mongoose';
+import { Schema, Model, ObjectId } from 'mongoose';
 
 const bcrypt = require('bcrypt');
 
@@ -27,7 +27,9 @@ const answer: number = User.myStaticMethod();
 
 interface User {
     email: string;
+    name: string;
     password: string;
+    wordStatistics: [];
 }
 
 interface UserModel extends Model<User> {
@@ -41,11 +43,22 @@ const userSchema = new Schema<User, UserModel>({
         unique: true,
         lowercase: true
     },
+    name: {
+        type: String,
+        required: false,
+        minLength: 3
+    },
     password: {
         type: String,
         required: true,
         minLength: 8
-    }
+    },
+    wordStatistics: [{
+      wordId: mongoose.ObjectId,
+      percentage: Number,
+      repetitions: Number,
+      correct: Number
+    }]
 });
 
 userSchema.static('login', async function login(email, password) {
@@ -59,6 +72,18 @@ userSchema.static('login', async function login(email, password) {
     }
     throw 'incorrect email';
 });
+
+//userSchema.static('getUserData', async function getUserData(email, password) {
+//    const user = await this.findOne({ email });
+//    if (user) {
+//      const auth = await bcrypt.compare(password, user.password);
+//      if(auth) {
+//          return user;
+//      }
+//      throw 'incorrect password';
+//    }
+//    throw 'incorrect email';
+//});
 
 // We 'hook up' the mongoose schema <userSchema> to the mongoose hooks
 // pre-save and post-save

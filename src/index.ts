@@ -99,6 +99,8 @@ app.use('/api/portfolio', portfolioRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api/voc', requireAuth);
 app.use('/api/voc', vocRoutes);
+app.use('/api/voc', requireAuth);
+app.use('/api/voc', vocRoutes);
 
 
 //=========================================================================================
