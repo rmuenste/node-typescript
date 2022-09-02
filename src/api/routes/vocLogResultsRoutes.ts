@@ -10,9 +10,10 @@ const router = express.Router();
 //=========================================================================================
 //                              rugerlogsingleresult push Route 
 //=========================================================================================
-router.route('/rugerlogsingleresult/').push( async (req: any, res: any) => {
+router.route('/rugerlogsingleresult/').post( async (req: any, res: any) => {
     
   const userId = req.body.userId;
+  console.log(req.body);
   try {
     console.log("rugerlogsingleresult route");
     const theUser = await User.find({_id: userId});

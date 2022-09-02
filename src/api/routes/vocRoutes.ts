@@ -15,8 +15,13 @@ const ruGerItems = require('../../models/vocabularyItem');
 router.route('/rugervocall/').get( async (req: any, res: any) => {
     
   try {
+    const userId = req.body.userId;
+    var theUser = await User.find({_id: userId});
     const items: Array<RuGerItem> = await ruGerItems.find();
-    console.log(items);
+//    console.log(items);
+    console.log("rugervocall: ");
+    console.log(theUser);
+    let theData = theUser[0].wordStatistics;
     res.status(200).json(items);
   }
   catch(error) {
@@ -43,15 +48,19 @@ const findUser = async(req: any, res: any, userId: string) => {
 //=========================================================================================
 router.route('/rugerlogsingleresult/').post( async (req: any, res: any) => {
     
-  const { wordId, result } = req.body;
+  const { wordStatistics } = req.body;
   const userId = req.body.userId;
+  console.log("WordStatistics:");
+  console.log(wordStatistics);
+  //console.log("req.Body:");
+  //console.log(req.body);
   try {
     console.log("rugerlogsingleresult route");
-    console.log(`WordId: ${wordId}`);
+//    console.log(`WordId: ${wordId}`);
     //await User.updateOne({ _id: userId}, {$set: {name: "Hans"}});
-    await User.updateOne({ _id: userId}, {$set: {"wordStatistics.$[elem].repetitions": 0}}, {arrayFilters: [{"elem.repetitions": 1}]});
+//    await User.updateOne({ _id: userId}, {$set: {"wordStatistics.$[elem].repetitions": 0}}, {arrayFilters: [{"elem.repetitions": 1}]});
 //    await User.updateOne({ _id: userId}, {$set: {"wordStatistics.$[elem].repetitions": 1}}, {arrayFilters: [{"elem.wordId": wordId}]});
-    await User.updateOne({ _id: userId}, {$set: {name: "Hans"}});
+//    await User.updateOne({ _id: userId}, {$set: {name: "Hans"}});
     var theUser = await User.find({_id: userId});
 //    console.log(`theUser: ${theUser}`);
 //    var theUser = await User.find({_id: userId}).lean();
