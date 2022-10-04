@@ -76,6 +76,11 @@ router.route('/rugerlogsingleresult/').post( async (req: any, res: any) => {
 //    }
 //    let theUser2 = await User.find({ _id: userId}, {arrayFilters: [{"elem.wordId": wordId}]});
 //     db.users.updateOne({ _id: ObjectId("62b8b8e2714b1e822fb0efb1")}, {$set: {"wordStatistics.$[elem].repetitions": 0}}, {arrayFilters: [{"elem.wordId": ObjectId("62c2de96cbc55818e9088273")}]})
+// B> db['ru-ger-items'].find().forEach(function (col) { print(col); });   
+//db.users.updateOne({_id: ObjectId("62b8b8e2714b1e822fb0efb1")}, {$push:{"dictionaries.0.words": array[0]}})
+//authDB> for (var i = 0; i < array.length; i++) {
+//... db.users.updateOne({_id: ObjectId("62b8b8e2714b1e822fb0efb1")}, {$push:{"dictionaries.0.words": array[i]}});
+//... }
 
     res.status(200).json({message: "All ok!"});
   }
