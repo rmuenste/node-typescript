@@ -1,11 +1,13 @@
 export {};
 import { RuGerItem } from "../../models/vocabularyItem";
+import { Dictionary } from "../../models/dictionary";
 const express = require('express');
 
 const router = express.Router();
 
 const User = require('../../models/user');
 
+const Dictionaries = require('../../models/dictionary');
 const ruGerItems = require('../../models/vocabularyItem');
 
 
@@ -16,13 +18,14 @@ router.route('/rugervocall/').get( async (req: any, res: any) => {
     
   try {
     const userId = req.body.userId;
-    var theUser = await User.find({_id: userId});
+    var theUser = await User.find({_id: userId},{"dictionaries": 1}).lean();
     const items: Array<RuGerItem> = await ruGerItems.find();
-//    console.log(items);
     console.log("rugervocall: ");
-    console.log(theUser);
-    let theData = theUser[0].wordStatistics;
-    res.status(200).json(items);
+    let object = theUser[0];
+    let theItems = object.dictionaries[0].words;
+    console.log("Object: %o",object.dictionaries[0].words);
+    console.log("Object2: %o",items);
+    res.status(200).json(theItems);
   }
   catch(error) {
     return res.status(400).json({message: "Error finding vocabulary items."});
@@ -42,6 +45,23 @@ const findUser = async(req: any, res: any, userId: string) => {
   }
 
 } 
+
+//=========================================================================================
+//                              rugerdicts get Route 
+//=========================================================================================
+router.route('/rugervocdicts/').get( async (req: any, res: any) => {
+    
+  try {
+    const userId = req.body.userId;
+    const items: Array<Dictionary> = await Dictionaries.find();
+    console.log("Object2: %o",items);
+    res.status(200).json(items);
+  }
+  catch(error) {
+    return res.status(400).json({message: "Error finding vocabulary dicts."});
+  }
+
+});
 
 //=========================================================================================
 //                              rugerlogsingleresult push Route 
@@ -90,4 +110,270 @@ router.route('/rugerlogsingleresult/').post( async (req: any, res: any) => {
 
 });
 
+
+
 module.exports = router;
+/*
+[
+  {
+    _id: '62c2de96cbc55818e908828c',
+    German: 'Ausweis',
+    Article: 'der',
+    Russian: 'паспорт',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088285',
+    German: 'Dusche',
+    Article: 'die',
+    Russian: 'душ',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e908827c',
+    German: 'Keller',
+    Article: 'der',
+    Russian: 'подвал',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088282',
+    German: 'Kissen',
+    Article: 'das',
+    Russian: 'подушка',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088287',
+    German: 'Backofen',
+    Article: 'der',
+    Russian: 'духовка',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e908827e',
+    German: 'Stuhl',
+    Article: 'der',
+    Russian: 'стул',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e908828b',
+    German: 'Kühlschrank',
+    Article: 'der',
+    Russian: 'холодильнк',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088273',
+    German: 'Organisation',
+    Article: 'die',
+    Russian: 'организация',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088276',
+    German: 'Tisch',
+    Article: 'der',
+    Russian: 'стол',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e908828a',
+    German: 'Lampe',
+    Article: 'die',
+    Russian: 'лампа',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088279',
+    German: 'Schlafzimmer',
+    Article: 'das',
+    Russian: 'спальня',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e908827d',
+    German: 'Sofa',
+    Article: 'das',
+    Russian: 'диван',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088280',
+    German: 'Wohnung',
+    Article: 'die',
+    Russian: 'квартира',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088275',
+    German: 'Haus',
+    Article: 'das',
+    Russian: 'дом',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088289',
+    German: 'Toilette',
+    Article: 'die',
+    Russian: 'туалет',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088288',
+    German: 'Waschbecken',
+    Article: 'das',
+    Russian: 'раковина',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088278',
+    German: 'Boden',
+    Article: 'der',
+    Russian: 'пол',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e908827b',
+    German: 'Küche',
+    Article: 'die',
+    Russian: 'кухня',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088283',
+    German: 'Badewanne',
+    Article: 'die',
+    Russian: 'ванна',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e908827f',
+    German: 'Tür',
+    Article: 'die',
+    Russian: 'дверь',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088274',
+    German: 'Fenster',
+    Article: 'das',
+    Russian: 'окно',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088277',
+    German: 'Wand',
+    Article: 'die',
+    Russian: 'стена',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088284',
+    German: 'Mikrowelle',
+    Article: 'die',
+    Russian: 'микроволновка',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e908827a',
+    German: 'Badezimmer',
+    Article: 'das',
+    Russian: 'ванная комната',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088281',
+    German: 'Bett',
+    Article: 'das',
+    Russian: 'кровать',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  },
+  {
+    _id: '62c2de96cbc55818e9088286',
+    German: 'Spülmaschine',
+    Article: 'die',
+    Russian: 'посудомойка',
+    repetitions: 1,
+    correct: 1,
+    percentage: 0,
+    success: true
+  }
+]
+*/

@@ -4,12 +4,18 @@ export interface RuGerItem extends Document {
   German: string;
   Article: string;
   Russian: string;
+  repetitions: number;
+  correct: number;
+  percentage: number;
 }
 
 const rugerSchema = new Schema<RuGerItem>({
     German:  { type: String, required: true},
     Article: { type: String, required: true},
-    Russian: { type: String, required: true}
+    Russian: { type: String, required: true},
+    repetitions:{type: Number, required: true},
+    correct:    {type: Number, required: true},
+    percentage: {type: Number, required: true}
 });
 
 
