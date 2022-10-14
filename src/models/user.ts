@@ -29,7 +29,7 @@ interface User {
     email: string;
     name: string;
     password: string;
-    wordStatistics: [];
+    dictionaries: [];
 }
 
 interface UserModel extends Model<User> {
@@ -53,13 +53,20 @@ const userSchema = new Schema<User, UserModel>({
         required: true,
         minLength: 8
     },
-    wordStatistics: [{
-      wordId: mongoose.ObjectId,
-      percentage: Number,
-      repetitions: Number,
-      correct: Number
+    dictionaries: [{
+        name: String,
+        words: [
+            {
+            wordId: mongoose.ObjectId,
+            percentage: Number,
+            repetitions: Number,
+            correct: Number
+            }
+        ]
     }]
 });
+
+//
 
 userSchema.static('login', async function login(email, password) {
     const user = await this.findOne({ email });

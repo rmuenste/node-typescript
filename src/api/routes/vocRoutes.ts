@@ -69,19 +69,25 @@ router.route('/rugervocdicts/').get( async (req: any, res: any) => {
 router.route('/rugerlogsingleresult/').post( async (req: any, res: any) => {
     
   const { wordStatistics } = req.body;
-  const userId = req.body.userId;
-  console.log("WordStatistics:");
-  console.log(wordStatistics);
-  //console.log("req.Body:");
-  //console.log(req.body);
+  let userId = req.body.userId;
+  userId = "63400f7d91812d41641f56a7";
+//  console.log("WordStatistics:");
+  console.log("Results: ");
+  for(let i=0; i < wordStatistics.length; i++) {
+    console.log("Object: [%i] %o \n", i, wordStatistics[i]);
+  }
+//  //console.log("req.Body:");
+  console.log(`Got user: ${userId}`);
   try {
-    console.log("rugerlogsingleresult route");
+//    let aUser = await User.find({ _id: userId}).lean();
+//    console.log("User: %o \n", aUser);
+    await User.updateOne({ _id: userId}, { $inc: { "dictionaries.0.words.$[elem].repetitions": 1}}, {arrayFilters: [{"elem._id": "62c2de96cbc55818e908828c"}]})
 //    console.log(`WordId: ${wordId}`);
     //await User.updateOne({ _id: userId}, {$set: {name: "Hans"}});
 //    await User.updateOne({ _id: userId}, {$set: {"wordStatistics.$[elem].repetitions": 0}}, {arrayFilters: [{"elem.repetitions": 1}]});
 //    await User.updateOne({ _id: userId}, {$set: {"wordStatistics.$[elem].repetitions": 1}}, {arrayFilters: [{"elem.wordId": wordId}]});
 //    await User.updateOne({ _id: userId}, {$set: {name: "Hans"}});
-    var theUser = await User.find({_id: userId});
+//    var theUser = await User.find({_id: userId});
 //    console.log(`theUser: ${theUser}`);
 //    var theUser = await User.find({_id: userId}).lean();
 //    console.log(`WordId: ${wordId}`);
@@ -101,8 +107,9 @@ router.route('/rugerlogsingleresult/').post( async (req: any, res: any) => {
 //authDB> for (var i = 0; i < array.length; i++) {
 //... db.users.updateOne({_id: ObjectId("62b8b8e2714b1e822fb0efb1")}, {$push:{"dictionaries.0.words": array[i]}});
 //... }
+//db.users.updateOne({"_id":ObjectId("63400f7d91812d41641f56a7")}, { $inc: { "dictionaries.0.words.$[elem].repetitions": 1}}, {arrayFilters: [{"elem._id": ObjectId("62c2de96cbc55818e908828c")}]})
 
-    res.status(200).json({message: "All ok!"});
+    res.status(200).json({message: "All ok!", "user": userId});
   }
   catch(error) {
     return res.status(400).json({message: `Error finding current user: ${error}`});
