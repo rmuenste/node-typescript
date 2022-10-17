@@ -6,6 +6,7 @@ const express = require('express');
 const router = express.Router();
 
 const User = require('../../models/user');
+const Result = require('../../models/result');
 
 const Dictionaries = require('../../models/dictionary');
 const ruGerItems = require('../../models/vocabularyItem');
@@ -70,18 +71,30 @@ router.route('/rugerlogsingleresult/').post( async (req: any, res: any) => {
     
   const { wordStatistics } = req.body;
   let userId = req.body.userId;
-  userId = "63400f7d91812d41641f56a7";
-//  console.log("WordStatistics:");
-  console.log("Results: ");
-  for(let i=0; i < wordStatistics.length; i++) {
-    console.log("Object: [%i] %o \n", i, wordStatistics[i]);
-  }
-//  //console.log("req.Body:");
+  let dictId = req.body.dictId;
+  console.log(`Got dictionary: ${dictId}`);
   console.log(`Got user: ${userId}`);
+//  let userId = "63400f7d91812d41641f56a7";
+  console.log("WordStatistics:");
+//  console.log("Results: ");
+//  for(let i=0; i < wordStatistics.length; i++) {
+//    console.log("Object: [%i] %o \n", i, wordStatistics[i]);
+//  }
+//  //console.log("req.Body:");
+//  console.log(`Got user: ${userId}`);
   try {
+    for(let i=0; i < wordStatistics.length; i++) {
+//      console.log("Object: [%i] %o \n", i, wordStatistics[i]);
+      if (wordStatistics[i].success)
+//        await Result.updateOne({"user": userId}, {$inc: {[dictId + '.$[elem].repetitions']: 1, [dictId + '.$[elem].correct']: 1}}, {arrayFilters: [{"elem._id":wordStatistics[i]._id}]})      
+        await User.updateOne({"_id":userId}, {$inc: {"dictionaries.$[outer].words.$[inner].repetitions":1,"dictionaries.$[outer].words.$[inner].correct":1}}, {arrayFilters:[{"outer.name": dictId},{"inner._id": wordStatistics[i]._id}]});
+      else
+        //await Result.updateOne({"user": userId}, {$inc: {[dictId + '.$[elem].repetitions']: 1, [dictId + '.$[elem].correct']: 0}}, {arrayFilters: [{"elem._id":wordStatistics[i]._id}]})      
+        await User.updateOne({"_id":userId}, {$inc: {"dictionaries.$[outer].words.$[inner].repetitions":1,"dictionaries.$[outer].words.$[inner].correct":0}}, {arrayFilters:[{"outer.name": dictId},{"inner._id": wordStatistics[i]._id}]});
+    }
 //    let aUser = await User.find({ _id: userId}).lean();
 //    console.log("User: %o \n", aUser);
-    await User.updateOne({ _id: userId}, { $inc: { "dictionaries.0.words.$[elem].repetitions": 1}}, {arrayFilters: [{"elem._id": "62c2de96cbc55818e908828c"}]})
+//    await User.updateOne({ _id: userId}, { $inc: { "dictionaries.0.words.$[elem].repetitions": 1}}, {arrayFilters: [{"elem._id": "62c2de96cbc55818e908828c"}]})
 //    console.log(`WordId: ${wordId}`);
     //await User.updateOne({ _id: userId}, {$set: {name: "Hans"}});
 //    await User.updateOne({ _id: userId}, {$set: {"wordStatistics.$[elem].repetitions": 0}}, {arrayFilters: [{"elem.repetitions": 1}]});
@@ -108,7 +121,7 @@ router.route('/rugerlogsingleresult/').post( async (req: any, res: any) => {
 //... db.users.updateOne({_id: ObjectId("62b8b8e2714b1e822fb0efb1")}, {$push:{"dictionaries.0.words": array[i]}});
 //... }
 //db.users.updateOne({"_id":ObjectId("63400f7d91812d41641f56a7")}, { $inc: { "dictionaries.0.words.$[elem].repetitions": 1}}, {arrayFilters: [{"elem._id": ObjectId("62c2de96cbc55818e908828c")}]})
-
+//db.users.updateOne({"_id":ObjectId("62b8b8e2714b1e822fb0efb1")}, {$inc: {"dictionaries.$[outer].words.$[inner].repetitions":1}}, {arrayFilters:[{"outer.name":"A1"},{"inner._id": ObjectId("62c2de96cbc55818e908827b")}]})
     res.status(200).json({message: "All ok!", "user": userId});
   }
   catch(error) {
@@ -130,7 +143,6 @@ module.exports = router;
     repetitions: 1,
     correct: 1,
     percentage: 0,
-    success: true
   },
   {
     _id: '62c2de96cbc55818e9088285',
@@ -140,7 +152,6 @@ module.exports = router;
     repetitions: 1,
     correct: 1,
     percentage: 0,
-    success: true
   },
   {
     _id: '62c2de96cbc55818e908827c',
