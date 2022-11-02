@@ -19,13 +19,24 @@ router.route('/rugervocall/').get( async (req: any, res: any) => {
     
   try {
     const userId = req.body.userId;
-    var theUser = await User.find({_id: userId},{"dictionaries": 1}).lean();
-    const items: Array<RuGerItem> = await ruGerItems.find();
+    const dictId = req.query.dict;
+    console.log("Dict: %s",dictId);
+    //db.users.find({"_id":ObjectId("62b8b8e2714b1e822fb0efb1"),"dictionaries.name": "A1"}, {"dictionaries": 1})
+    var theUser = await User.find({_id: userId, "dictionaries.name": dictId},{"dictionaries": 1}).lean();
+    //var theUser = await User.find({_id: userId},{"dictionaries": 1}).lean();
+    //const items: Array<RuGerItem> = await ruGerItems.find();
     console.log("rugervocall: ");
     let object = theUser[0];
-    let theItems = object.dictionaries[0].words;
-    console.log("Object: %o",object.dictionaries[0].words);
-    console.log("Object2: %o",items);
+    let theItems = [];
+    for(let i = 0; i < object.dictionaries.length; i++) {
+      if (object.dictionaries[i].name == "A1") {
+        theItems = object.dictionaries[i].words;
+      }
+    }
+    if (theItems.length == 0)
+      throw "Found empty dictionary";
+//    console.log("Object: %o",object.dictionaries[0].words);
+//    console.log("Object2: %o",items);
     res.status(200).json(theItems);
   }
   catch(error) {
@@ -38,8 +49,8 @@ const findUser = async(req: any, res: any, userId: string) => {
 
   try {
     var theUser = await User.find({_id: userId}).lean();
-    console.log(`The user: ${theUser}`, typeof theUser);
-    console.log(`The user[0]: ${theUser[0]._id}`);
+//    console.log(`The user: ${theUser}`, typeof theUser);
+//    console.log(`The user[0]: ${theUser[0]._id}`);
     return theUser;
   } catch(error) {
     return res.status(400).json({message: "Error finding current user."});
@@ -55,7 +66,7 @@ router.route('/rugervocdicts/').get( async (req: any, res: any) => {
   try {
     const userId = req.body.userId;
     const items: Array<Dictionary> = await Dictionaries.find();
-    console.log("Object2: %o",items);
+//    console.log("Object2: %o",items);
     res.status(200).json(items);
   }
   catch(error) {
