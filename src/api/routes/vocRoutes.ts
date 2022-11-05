@@ -133,6 +133,7 @@ router.route('/rugerlogsingleresult/').post( async (req: any, res: any) => {
 //... }
 //db.users.updateOne({"_id":ObjectId("63400f7d91812d41641f56a7")}, { $inc: { "dictionaries.0.words.$[elem].repetitions": 1}}, {arrayFilters: [{"elem._id": ObjectId("62c2de96cbc55818e908828c")}]})
 //db.users.updateOne({"_id":ObjectId("62b8b8e2714b1e822fb0efb1")}, {$inc: {"dictionaries.$[outer].words.$[inner].repetitions":1}}, {arrayFilters:[{"outer.name":"A1"},{"inner._id": ObjectId("62c2de96cbc55818e908827b")}]})
+//mongod.exe --repair --dbpath "C:\Program Files\MongoDB\Server\4.4\data"
     res.status(200).json({message: "All ok!", "user": userId});
   }
   catch(error) {
