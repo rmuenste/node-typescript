@@ -20,7 +20,7 @@ router.route('/rugervocall/').get( async (req: any, res: any) => {
   try {
     const userId = req.body.userId;
     const dictId = req.query.dict;
-    console.log("Dict: %s",dictId);
+    console.log("Dict: %o",dictId);
     //db.users.find({"_id":ObjectId("62b8b8e2714b1e822fb0efb1"),"dictionaries.name": "A1"}, {"dictionaries": 1})
     var theUser = await User.find({_id: userId, "dictionaries.name": dictId},{"dictionaries": 1}).lean();
     //var theUser = await User.find({_id: userId},{"dictionaries": 1}).lean();
